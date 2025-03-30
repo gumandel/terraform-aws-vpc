@@ -4,8 +4,10 @@ provider "aws" {
 
 terraform {
     backend "s3" {
-        bucket = "gustavo-terraform-state"
+        bucket = "mandel-terraform-state"
         key    = "terraform.tfstate"
         region = "us-west-1"
     }
+
+    
 }

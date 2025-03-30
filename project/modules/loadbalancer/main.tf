@@ -10,7 +10,8 @@ data "aws_ami" "imagem_ec2" {
 resource "aws_security_group" "gustavo_nginx_sg" {
   name        = "gustavo-sg-frontend"
   description = "Grupo criado para configurar regras de ingress e outgoing"
-  vpc_id      = var.gustavo_vpc.id
+  # vpc_id      = var.gustavo_vpc.id
+  vpc_id      = var.vpc_id
 
   tags = {
     Name = "gustavo-nginx-sg"
@@ -45,7 +46,7 @@ resource "aws_security_group_rule" "gustavo_allow_outgoing" {
 }
 
 resource "aws_network_interface" "gustavo_nginx_ei" {
-  subnet_id = var.public_us_west_1b.id
+  subnet_id = var.public_us_west_1b
   tags = {
     Name = "gustavo-nginx-ei"
   }
@@ -54,8 +55,9 @@ resource "aws_network_interface" "gustavo_nginx_ei" {
 resource "aws_instance" "gustavo_nginx_ec2" {
   instance_type = "t3.micro"
   ami = data.aws_ami.imagem_ec2.id
-  subnet_id = var.public_us_west_1b.id
+  subnet_id = var.public_us_west_1b
   vpc_security_group_ids = [ aws_security_group.gustavo_nginx_sg.id ]
+  user_data = file("${path.module}/user-data.sh")
 
   associate_public_ip_address = true
   tags = {

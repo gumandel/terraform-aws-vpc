@@ -4,4 +4,5 @@ variable "project_region" {
 
 variable "project_name" {
     type = string
+    default = "mandel"
 }
